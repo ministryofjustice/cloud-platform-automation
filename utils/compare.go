@@ -3,7 +3,7 @@ package utils
 import (
 	"regexp"
 
-	"github.com/google/go-github/v61/github"
+	"github.com/google/go-github/v68/github"
 )
 
 var (

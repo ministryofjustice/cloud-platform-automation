@@ -3,7 +3,7 @@ package utils
 import (
 	"testing"
 
-	"github.com/google/go-github/v61/github"
+	"github.com/google/go-github/v68/github"
 )
 
 func TestFiles(t *testing.T) {
