@@ -27,7 +27,7 @@ func main() {
 	owner := repoS[0]
 	repoName := repoS[1]
 
-	f, _, err := utils.GetPullRequestFiles(owner, repoName, pull)
+	f, _, err := utils.GetPullRequestDetails(owner, repoName, pull)
 	if err != nil {
 		panic(err)
 	}
