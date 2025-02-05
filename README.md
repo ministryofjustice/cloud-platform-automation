@@ -5,6 +5,7 @@ This repository contains library of scripts user to automate the cloud platform 
 ## Contents
 - [utils](utils/): is a collection of utility scripts that can be used to automate common tasks.
 - [commit-check](commit-check/): is a tool that checks list of files in a commit and validates them against a set of rules. The file must be the only file in the commit or it like fail the check.
+- [annotation-check](annotation-check/): is a tool that checks the annotations namespace.yaml files and validates them against a set of rules.
 
 
 ## GO Modules
