@@ -14,9 +14,8 @@ import (
 )
 
 var (
-	client = github.NewClient(nil)
-	ctx    = context.Background()
-	ns     = Namespace{}
+	ctx = context.Background()
+	ns  = Namespace{}
 )
 
 type Namespace struct {
@@ -60,7 +59,7 @@ func AppClient() (*github.Client, error) {
 	return client, nil
 }
 
-func GetPullRequestDetails(o string, r string, n int) ([]*github.CommitFile, string, error) {
+func GetPullRequestDetails(client *github.Client, o string, r string, n int) ([]*github.CommitFile, string, error) {
 	files, _, err := client.PullRequests.ListFiles(ctx, o, r, n, nil)
 	if err != nil {
 		return nil, "", fmt.Errorf("error fetching files: %w", err)

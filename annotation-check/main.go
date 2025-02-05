@@ -30,7 +30,7 @@ func main() {
 		log.Fatalf("Error creating client: %v\n", err)
 	}
 
-	prFiles, branch, err := utils.GetPullRequestDetails(owner, repoName, pull)
+	prFiles, branch, err := utils.GetPullRequestDetails(client, owner, repoName, pull)
 	if err != nil {
 		log.Fatalf("Error getting pull request files: %v\n", err)
 	}

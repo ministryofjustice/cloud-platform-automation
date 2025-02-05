@@ -4,30 +4,24 @@ import (
 	"fmt"
 	"ministryofjustice/cloud-platform-automation/utils"
 	"os"
-	"strconv"
-	"strings"
 
 	"github.com/sethvargo/go-githubactions"
 )
 
 var (
-	ref  = os.Getenv("GITHUB_REF")
-	repo = os.Getenv("GITHUB_REPOSITORY")
 	file = os.Getenv("FILE_NAME")
 )
 
 // main function to check if the pull request contains the file with the name specified and no other commited files.
 func main() {
+	owner, repoName, pull := utils.GetPRDetails(os.Getenv("GITHUB_REF"), os.Getenv("GITHUB_REPOSITORY"))
 
-	githubrefS := strings.Split(ref, "/")
-	prnum := githubrefS[2]
-	pull, _ := strconv.Atoi(prnum)
+	client, err := utils.AppClient()
+	if err != nil {
+		panic(err)
+	}
 
-	repoS := strings.Split(repo, "/")
-	owner := repoS[0]
-	repoName := repoS[1]
-
-	f, _, err := utils.GetPullRequestDetails(owner, repoName, pull)
+	f, _, err := utils.GetPullRequestDetails(client, owner, repoName, pull)
 	if err != nil {
 		panic(err)
 	}
