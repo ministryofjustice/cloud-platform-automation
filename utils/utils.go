@@ -5,7 +5,6 @@ import (
 	"strings"
 )
 
-// GetPRDetails uses pull request details and splits them into repository owner, repository name and pull request number and return the values
 func GetPRDetails(ref, repo string) (string, string, int) {
 	githubrefS := strings.Split(ref, "/")
 	prnum := githubrefS[2]

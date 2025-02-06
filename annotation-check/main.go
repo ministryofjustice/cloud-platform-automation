@@ -46,9 +46,9 @@ func main() {
 		log.Fatalf("Error checking team name: %v\n", err)
 	}
 
-	utils.Results(client, teamValidation, publicRepo)
-	if err != nil {
-		log.Printf("Results: %v", err)
+	resultsErr := utils.Results(client, teamValidation, publicRepo)
+	if resultsErr != nil {
+		log.Printf("Results: %v", resultsErr)
 	}
 
 	message := fmt.Sprintf("Team name: %s\n - Valid: %s\n\nRepository: %s\n - Public: %s\n", ns.MetaData.Annotations.TeamName, fmt.Sprintf("%v", teamValidation), ns.MetaData.Annotations.SourceCodeURL, fmt.Sprintf("%v", publicRepo))

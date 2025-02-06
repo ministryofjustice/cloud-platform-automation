@@ -28,7 +28,6 @@ type Namespace struct {
 	} `yaml:"metadata"`
 }
 
-// AppClient creates a new GitHub client using the GitHub App Details and returns the client
 func AppClient() (*github.Client, error) {
 	key := os.Getenv("GITHUB_PRIVATE_KEY")
 	appid := os.Getenv("GITHUB_APP_ID")
@@ -52,16 +51,12 @@ func AppClient() (*github.Client, error) {
 
 	installationTokenSource := githubauth.NewInstallationTokenSource(installIDInt, appTokenSource)
 
-	// oauth2.NewClient uses oauth2.ReuseTokenSource to reuse the token until it expires.
-	// The token will be automatically refreshed when it expires.
-	// InstallationTokenSource has the mechanism to refresh the token when it expires.
-	httpClient := oauth2.NewClient(context.Background(), installationTokenSource)
+	oauthHttpClient := oauth2.NewClient(context.Background(), installationTokenSource)
 
-	client := github.NewClient(httpClient)
+	client := github.NewClient(oauthHttpClient)
 	return client, nil
 }
 
-// GetPullRequestDetails fetches the files and branch details of a pull request and returns the values
 func GetPullRequestDetails(client *github.Client, o string, r string, n int) ([]*github.CommitFile, string, error) {
 	files, _, err := client.PullRequests.ListFiles(ctx, o, r, n, nil)
 	if err != nil {
@@ -76,7 +71,6 @@ func GetPullRequestDetails(client *github.Client, o string, r string, n int) ([]
 	return files, branch.GetHead().GetRef(), err
 }
 
-// GetFileContent fetches the content of a file and returns the file content
 func GetFileContent(client *github.Client, ctx context.Context, file *github.CommitFile, owner, repo, ref string) (Namespace, error) {
 	opts := &github.RepositoryContentGetOptions{
 		Ref: ref,
@@ -94,7 +88,6 @@ func GetFileContent(client *github.Client, ctx context.Context, file *github.Com
 	return ns, nil
 }
 
-// CheckRepoPublic checks if the repository is public and returns a boolean value
 func CheckRepoPublic(client *github.Client, url string) (bool, error) {
 	surl := strings.Split(url, "/")
 	owner := surl[3]
@@ -112,7 +105,6 @@ func CheckRepoPublic(client *github.Client, url string) (bool, error) {
 	}
 }
 
-// CheckTeamName checks if the team name is valid and returns a boolean value
 func CheckTeamName(client *github.Client, owner string) (bool, error) {
 	teams, _, err := client.Teams.GetTeamBySlug(ctx, owner, ns.MetaData.Annotations.TeamName)
 	if err != nil {
@@ -125,7 +117,6 @@ func CheckTeamName(client *github.Client, owner string) (bool, error) {
 	return false, err
 }
 
-// CreateComment creates a comment on a pull request
 func CreateComment(client *github.Client, owner, repoName, message string, pull int) error {
 	comment := &github.IssueComment{
 		Body: github.Ptr(message),
@@ -139,7 +130,6 @@ func CreateComment(client *github.Client, owner, repoName, message string, pull 
 	return nil
 }
 
-// GetPullRequestDetails creates a output for the action depending on the values on the public repository and github team name validation
 func Results(client *github.Client, team, public bool) error {
 	if public && team {
 		githubactions.SetOutput("valid", "true")
