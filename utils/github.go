@@ -144,8 +144,7 @@ func Results(client *github.Client, team, public bool) error {
 	if public && team {
 		githubactions.SetOutput("valid", "true")
 		return nil
-	} else {
-		githubactions.SetOutput("valid", "false")
-		return fmt.Errorf("repository is not public or team name is invalid")
 	}
+	githubactions.SetOutput("valid", "false")
+	return fmt.Errorf("repository is not public or team name is invalid")
 }
