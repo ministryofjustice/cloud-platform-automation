@@ -6,12 +6,15 @@ import (
 	"log"
 	"ministryofjustice/cloud-platform-automation/utils"
 	"os"
-	"strings"
+
+	"github.com/google/go-github/v68/github"
 )
 
 var (
-	ctx = context.Background()
-	ns  utils.Namespace
+	ctx    = context.Background()
+	ns     utils.Namespace
+	nsFile = os.Getenv("NAMESPACE_FILE")
+	branch = os.Getenv("BRANCH")
 )
 
 func main() {
@@ -22,18 +25,13 @@ func main() {
 		log.Fatalf("Error creating client: %v\n", err)
 	}
 
-	prFiles, branch, err := utils.GetPullRequestDetails(client, owner, repoName, pull)
-	if err != nil {
-		log.Fatalf("Error getting pull request files: %v\n", err)
+	file := &github.CommitFile{
+		Filename: &nsFile,
 	}
 
-	for _, file := range prFiles {
-		if strings.Contains(file.GetFilename(), "namespace") {
-			ns, err = utils.GetFileContent(client, ctx, file, owner, repoName, branch)
-			if err != nil {
-				log.Fatalf("Error getting file content: %v\n", err)
-			}
-		}
+	ns, err = utils.GetFileContent(client, ctx, file, owner, repoName, branch)
+	if err != nil {
+		log.Fatalf("Error getting file content: %v\n", err)
 	}
 
 	publicRepo, err := utils.CheckRepoPublic(client, ns.MetaData.Annotations.SourceCodeURL)
