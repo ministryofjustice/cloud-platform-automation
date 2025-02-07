@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/go-github/v68/github"
 	"github.com/jferrl/go-githubauth"
+	"github.com/sethvargo/go-githubactions"
 	"golang.org/x/oauth2"
 	"gopkg.in/yaml.v2"
 )
@@ -50,12 +51,9 @@ func AppClient() (*github.Client, error) {
 
 	installationTokenSource := githubauth.NewInstallationTokenSource(installIDInt, appTokenSource)
 
-	// oauth2.NewClient uses oauth2.ReuseTokenSource to reuse the token until it expires.
-	// The token will be automatically refreshed when it expires.
-	// InstallationTokenSource has the mechanism to refresh the token when it expires.
-	httpClient := oauth2.NewClient(context.Background(), installationTokenSource)
+	oauthHttpClient := oauth2.NewClient(context.Background(), installationTokenSource)
 
-	client := github.NewClient(httpClient)
+	client := github.NewClient(oauthHttpClient)
 	return client, nil
 }
 
@@ -130,4 +128,13 @@ func CreateComment(client *github.Client, owner, repoName, message string, pull 
 	}
 
 	return nil
+}
+
+func Results(client *github.Client, team, public bool) error {
+	if public && team {
+		githubactions.SetOutput("valid", "true")
+		return nil
+	}
+	githubactions.SetOutput("valid", "false")
+	return fmt.Errorf("repository is not public or team name is invalid")
 }
