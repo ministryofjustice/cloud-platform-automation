@@ -14,7 +14,7 @@ func TestAppClient(t *testing.T) {
 	os.Setenv("GITHUB_APP_ID", "123456")
 	os.Setenv("GITHUB_INSTALLATION_ID", "654321")
 
-	client, err := AppClient()
+	client, err := AppClient(os.Getenv("GITHUB_PRIVATE_KEY"), os.Getenv("GITHUB_APP_ID"), os.Getenv("GITHUB_INSTALLATION_ID"))
 	assert.NoError(t, err)
 	assert.NotNil(t, client)
 }
@@ -25,7 +25,7 @@ func TestAppClientInvalidAppID(t *testing.T) {
 	os.Setenv("GITHUB_APP_ID", "invalid_app_id")
 	os.Setenv("GITHUB_INSTALLATION_ID", "654321")
 
-	client, err := AppClient()
+	client, err := AppClient(os.Getenv("GITHUB_PRIVATE_KEY"), os.Getenv("GITHUB_APP_ID"), os.Getenv("GITHUB_INSTALLATION_ID"))
 	assert.Error(t, err)
 	assert.Nil(t, client)
 }
@@ -36,7 +36,7 @@ func TestAppClientInvalidInstallationID(t *testing.T) {
 	os.Setenv("GITHUB_APP_ID", "123456")
 	os.Setenv("GITHUB_INSTALLATION_ID", "invalid_installation_id")
 
-	client, err := AppClient()
+	client, err := AppClient(os.Getenv("GITHUB_PRIVATE_KEY"), os.Getenv("GITHUB_APP_ID"), os.Getenv("GITHUB_INSTALLATION_ID"))
 	assert.Error(t, err)
 	assert.Nil(t, client)
 }
@@ -47,7 +47,7 @@ func TestAppClientInvalidPrivateKey(t *testing.T) {
 	os.Setenv("GITHUB_APP_ID", "123456")
 	os.Setenv("GITHUB_INSTALLATION_ID", "654321")
 
-	client, err := AppClient()
+	client, err := AppClient(os.Getenv("GITHUB_PRIVATE_KEY"), os.Getenv("GITHUB_APP_ID"), os.Getenv("GITHUB_INSTALLATION_ID"))
 	assert.Error(t, err)
 	assert.Nil(t, client)
 }

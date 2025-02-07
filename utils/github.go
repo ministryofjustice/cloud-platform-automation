@@ -3,13 +3,11 @@ package utils
 import (
 	"context"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 
 	"github.com/google/go-github/v68/github"
 	"github.com/jferrl/go-githubauth"
-	"github.com/sethvargo/go-githubactions"
 	"golang.org/x/oauth2"
 	"gopkg.in/yaml.v2"
 )
@@ -28,10 +26,7 @@ type Namespace struct {
 	} `yaml:"metadata"`
 }
 
-func AppClient() (*github.Client, error) {
-	key := os.Getenv("GITHUB_PRIVATE_KEY")
-	appid := os.Getenv("GITHUB_APP_ID")
-	installid := os.Getenv("GITHUB_INSTALLATION_ID")
+func AppClient(key, appid, installid string) (*github.Client, error) {
 	privateKey := []byte(key)
 
 	appIDInt, err := strconv.ParseInt(appid, 10, 64)
@@ -132,9 +127,9 @@ func CreateComment(client *github.Client, owner, repoName, message string, pull 
 
 func Results(client *github.Client, team, public bool) error {
 	if public && team {
-		githubactions.SetOutput("valid", "true")
+		// githubactions.SetOutput("valid", "true")
 		return nil
 	}
-	githubactions.SetOutput("valid", "false")
+	// githubactions.SetOutput("valid", "false")
 	return fmt.Errorf("repository is not public or team name is invalid")
 }
