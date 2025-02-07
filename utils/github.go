@@ -8,6 +8,7 @@ import (
 
 	"github.com/google/go-github/v68/github"
 	"github.com/jferrl/go-githubauth"
+	"github.com/sethvargo/go-githubactions"
 	"golang.org/x/oauth2"
 	"gopkg.in/yaml.v2"
 )
@@ -127,9 +128,9 @@ func CreateComment(client *github.Client, owner, repoName, message string, pull 
 
 func Results(client *github.Client, team, public bool) error {
 	if public && team {
-		// githubactions.SetOutput("valid", "true")
+		githubactions.SetOutput("valid", "true")
 		return nil
 	}
-	// githubactions.SetOutput("valid", "false")
+	githubactions.SetOutput("valid", "false")
 	return fmt.Errorf("repository is not public or team name is invalid")
 }
