@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"ministryofjustice/cloud-platform-automation/utils"
@@ -11,25 +12,31 @@ import (
 )
 
 var (
-	ctx    = context.Background()
-	ns     utils.Namespace
-	nsFile = os.Getenv("NAMESPACE_FILE")
-	branch = os.Getenv("BRANCH")
+	ctx        = context.Background()
+	ns         utils.Namespace
+	nsFile     = flag.String("nsfile", os.Getenv("NAMESPACE_FILE"), "Namespace file string")
+	branch     = flag.String("branch", os.Getenv("BRANCH"), "Branch string")
+	githubrepo = flag.String("githubrepo", os.Getenv("GITHUB_REPOSITORY"), "Github Repository string")
+	githubref  = flag.String("githubref", os.Getenv("GITHUB_REF"), "Github Respository PR ref string")
+	key        = flag.String("key", os.Getenv("GITHUB_PRIVATE_KEY"), "Github App private key string")
+	appid      = flag.String("appid", os.Getenv("GITHUB_APP_ID"), "Github App ID string")
+	installid  = flag.String("installid", os.Getenv("GITHUB_INSTALLATION_ID"), "Github Installation ID string")
 )
 
 func main() {
-	owner, repoName, pull := utils.GetPRDetails(os.Getenv("GITHUB_REF"), os.Getenv("GITHUB_REPOSITORY"))
+	flag.Parse()
+	owner, repoName, pull := utils.GetPRDetails(*githubrepo, *githubref)
 
-	client, err := utils.AppClient()
+	client, err := utils.AppClient(*key, *appid, *installid)
 	if err != nil {
 		log.Fatalf("Error creating client: %v\n", err)
 	}
 
 	file := &github.CommitFile{
-		Filename: &nsFile,
+		Filename: nsFile,
 	}
 
-	ns, err = utils.GetFileContent(client, ctx, file, owner, repoName, branch)
+	ns, err = utils.GetFileContent(client, ctx, file, owner, repoName, *branch)
 	if err != nil {
 		log.Fatalf("Error getting file content: %v\n", err)
 	}

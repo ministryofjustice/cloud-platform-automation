@@ -16,7 +16,7 @@ var (
 func main() {
 	owner, repoName, pull := utils.GetPRDetails(os.Getenv("GITHUB_REF"), os.Getenv("GITHUB_REPOSITORY"))
 
-	client, err := utils.AppClient()
+	client, err := utils.AppClient(os.Getenv("GITHUB_PRIVATE_KEY"), os.Getenv("GITHUB_APP_ID"), os.Getenv("GITHUB_INSTALLATION_ID"))
 	if err != nil {
 		panic(err)
 	}
