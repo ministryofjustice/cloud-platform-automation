@@ -39,12 +39,12 @@ func main() {
 
 	publicRepo, err := utils.CheckRepoPublic(client, ns.MetaData.Annotations.SourceCodeURL)
 	if err != nil {
-		log.Fatalf("Error checking repo is public: %v\n", err)
+		log.Printf("Error checking repo is public: %v\n", err)
 	}
 
 	teamValidation, err := utils.CheckTeamName(client, owner)
 	if err != nil {
-		log.Fatalf("Error checking team name: %v\n", err)
+		log.Printf("Error checking team name: %v\n", err)
 	}
 
 	resultsErr := utils.Results(client, teamValidation, publicRepo)
