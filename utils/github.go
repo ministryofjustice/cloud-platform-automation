@@ -8,7 +8,6 @@ import (
 
 	"github.com/google/go-github/v68/github"
 	"github.com/jferrl/go-githubauth"
-	"github.com/sethvargo/go-githubactions"
 	"golang.org/x/oauth2"
 	"gopkg.in/yaml.v2"
 )
@@ -89,6 +88,10 @@ func CheckRepoPublic(client *github.Client, url string) (bool, error) {
 	owner := surl[3]
 	prrepo := surl[4]
 
+	if strings.Contains(prrepo, ".git") {
+		prrepo = strings.TrimSuffix(prrepo, ".git")
+	}
+
 	repo, _, err := client.Repositories.Get(ctx, owner, prrepo)
 	if err != nil {
 		return false, fmt.Errorf("error fetching repo: %v", err)
@@ -126,11 +129,13 @@ func CreateComment(client *github.Client, owner, repoName, message string, pull 
 	return nil
 }
 
-func Results(client *github.Client, team, public bool) error {
-	if public && team {
-		githubactions.SetOutput("valid", "true")
-		return nil
+func Results(client *github.Client, team bool, public []bool) error {
+	if team {
+		for _, p := range public {
+			if p {
+				return nil
+			}
+		}
 	}
-	githubactions.SetOutput("valid", "false")
 	return fmt.Errorf("repository is not public or team name is invalid")
 }
