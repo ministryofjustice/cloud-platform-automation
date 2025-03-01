@@ -25,7 +25,7 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
       
       - name: Run GoReleaser for commit-check
-        uses: goreleaser/goreleaser-action@9ed2f89a662bf1735a48bc8557fd212fa902bebf # v6.1.0
+        uses: goreleaser/goreleaser-action@90a3faa9d0182683851fbfa97ca1a2cb983bfca3 # v6.2.1
         if: success() && startsWith(github.ref, 'refs/tags/')
         with:
           version: latest
@@ -54,7 +54,7 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
       
       - name: Run GoReleaser for annotation-check
-        uses: goreleaser/goreleaser-action@9ed2f89a662bf1735a48bc8557fd212fa902bebf # v6.1.0
+        uses: goreleaser/goreleaser-action@90a3faa9d0182683851fbfa97ca1a2cb983bfca3 # v6.2.1
         if: success() && startsWith(github.ref, 'refs/tags/')
         with:
           version: latest
