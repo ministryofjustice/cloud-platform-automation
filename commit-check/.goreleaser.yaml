@@ -1,4 +1,5 @@
 project_name: cloud-platform-commit-check
+version: 2
 env:
   - CGO_ENABLED=0
   - DOCKERFILE=Dockerfile
