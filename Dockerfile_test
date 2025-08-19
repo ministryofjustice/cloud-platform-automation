@@ -1,14 +1,22 @@
-FROM golang:1.23.6-alpine3.21
+FROM golang:1.25.0-alpine3.22
 
-WORKDIR /annotation-check
+ARG \
+  APP_NAME=$1
 
-COPY go.mod /annotation-check/go.mod
-COPY go.sum /annotation-check/go.sum
-COPY /annotation-check/main.go /annotation-check/main.go
-COPY utils /annotation-check/utils
+ENV \
+  CGO_ENABLED=0 \
+  GOOS=linux \
+  GOARCH=amd64
+
+WORKDIR /app
+
+COPY go.mod /app/go.mod
+COPY go.sum /app/go.sum
+COPY /${APP_NAME}/main.go /app/main.go
+COPY utils /app/utils
 
 RUN go mod download
 
-RUN go build -ldflags "-s -w" -o /go/bin/main -buildvcs=false
+RUN go build -ldflags "-s -w" -o /app/main -buildvcs=false
 
-CMD ["sh", "-c", "main"]
+CMD ["sh", "-c", "/app/main"]
