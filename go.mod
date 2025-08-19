@@ -2,6 +2,8 @@ module ministryofjustice/cloud-platform-automation
 
 go 1.25
 
+toolchain go1.25.0
+
 require (
 	github.com/aws/aws-sdk-go-v2 v1.38.0
 	github.com/aws/aws-sdk-go-v2/config v1.31.0
