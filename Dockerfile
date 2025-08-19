@@ -1,4 +1,4 @@
-FROM golang:1.23.6-alpine3.21
+FROM golang:1.25.0-alpine3.22
 
 ARG COMMAND
 

@@ -6,6 +6,7 @@ This repository contains library of scripts user to automate the cloud platform 
 - [utils](utils/): is a collection of utility scripts that can be used to automate common tasks.
 - [commit-check](commit-check/): is a tool that checks list of files in a commit and validates them against a set of rules. The file must be the only file in the commit or it like fail the check.
 - [annotation-check](annotation-check/): is a tool that checks the annotations namespace.yaml files and validates them against a set of rules.
+- [iam-policy-usage](iam-policy-usage/): is a tool that checks the IAM policies in the AWS account and checking for last used date, policy associations, and tagged and untagged resources.
 
 
 ## GO Modules
