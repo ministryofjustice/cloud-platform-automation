@@ -56,18 +56,48 @@ func main() {
 	writer := csv.NewWriter(&buf)
 
 	// Write CSV header
-	writer.Write([]string{"PolicyName", "PolicyArn", "LastUsed", "IsAttachedable", "UsedByEntity", "Flag", "Tags"})
+	writer.Write([]string{"PolicyName", "PolicyArn", "LastUsed", "IsAttachedable", "UsedByEntity", "Flag", "Owner", "SlackChannel", "SourceCode", "Application", "GitHubTeam", "BusinessUnit", "Namespace", "InfrastructureSupport"})
 
-	// Write policy usage data
+	//Write policy usage data
 	for _, policy := range results {
 		// Convert tags to a string
-		var tagsStr string
-		for i, tag := range policy.Tags {
-			if i > 0 {
-				tagsStr += ";"
+		var owner string
+		var slackchannel string
+		var sourcecode string
+		var application string
+		var githubteam string
+		var businessunit string
+		var namespace string
+		var infrastructuresupport string
+
+		for _, tag := range policy.Tags {
+			// equals the value of the key that equals owner
+			if derefString(tag.Key) == "owner" {
+				owner = derefString(tag.Value)
 			}
-			tagsStr += fmt.Sprintf("%s=%s", derefString(tag.Key), derefString(tag.Value))
+			if derefString(tag.Key) == "slack-channel" {
+				slackchannel = derefString(tag.Value)
+			}
+			if derefString(tag.Key) == "source-code" {
+				sourcecode = derefString(tag.Value)
+			}
+			if derefString(tag.Key) == "application" {
+				application = derefString(tag.Value)
+			}
+			if derefString(tag.Key) == "GithubTeam" {
+				githubteam = derefString(tag.Value)
+			}
+			if derefString(tag.Key) == "business-unit" {
+				businessunit = derefString(tag.Value)
+			}
+			if derefString(tag.Key) == "namespace" {
+				namespace = derefString(tag.Value)
+			}
+			if derefString(tag.Key) == "infrastructure-support" {
+				infrastructuresupport = derefString(tag.Value)
+			}
 		}
+
 		policyName := derefString(policy.PolicyName)
 		policyArn := derefString(policy.PolicyArn)
 		lastUsed := ""
@@ -81,7 +111,14 @@ func main() {
 			policy.IsAttachedable,
 			policy.UsedBy,
 			policy.Flag,
-			tagsStr,
+			owner,
+			slackchannel,
+			sourcecode,
+			application,
+			githubteam,
+			businessunit,
+			namespace,
+			infrastructuresupport,
 		})
 	}
 
