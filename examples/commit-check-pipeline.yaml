@@ -24,10 +24,18 @@ jobs:
     
     - name: auto approve
       if: ${{ steps.commit-check.outputs.approval == 'approval_not_needed' }}
-      uses: hmarr/auto-approve-action@v4
-      with:
-        review-message: 'Automatically approving PR for skip file'
-      
+      uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              event: "APPROVE",
+              body: "Automatically approving PR for skip file"
+            })
+
     - name: cloud platform approval needed
       if: ${{ steps.commit-check.outputs.approval == 'approval_needed' }}
       uses: actions/github-script@v7
