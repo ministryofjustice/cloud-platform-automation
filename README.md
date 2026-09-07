@@ -1,5 +1,7 @@
 # cloud-platform-automation
 
+[![Ministry of Justice Repository Compliance Badge](https://github-community.service.justice.gov.uk/repository-standards/api/cloud-platform-automation/badge)](https://github-community.service.justice.gov.uk/repository-standards/cloud-platform-automation)
+
 This repository contains library of scripts user to automate the cloud platform tasks
 
 ## Contents
